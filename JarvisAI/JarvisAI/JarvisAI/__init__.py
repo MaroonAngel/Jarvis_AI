@@ -69,7 +69,6 @@ except Exception as e:
     from JarvisAI.features.hot_word_detection import hot_word_detection as wake_word
     from JarvisAI.features.mic_input_ai.mic_input_ai import SpeechRecognition as SpeechRecognitionAI
     from JarvisAI.features.jarvisai_api.jarvisai_api import JarvisAIAPI
-    from JarvisAI.features.detection.detection import Detections
     from JarvisAI.features.chatbot.chatbot import start_chatbot_large as chatbot_lrg
     from JarvisAI.features.chatbot.chatbot import start_chatbot_small as chatbot_sml
     from JarvisAI.features.chatbot.chatbot import load_chatbot_models as load_ch_model
@@ -114,7 +113,7 @@ class JarvisAssistant:
         self.token = token
         self.speech_recognition_ai = SpeechRecognitionAI()
         self.jarvisai_api = JarvisAIAPI()
-        self.obj_detection = Detections()
+        # self.obj_detection = Detections()
 
     def setup(self):
         """
@@ -150,7 +149,7 @@ class JarvisAssistant:
         """
         if not self.sync:
             config = configparser.ConfigParser()
-            config.read('config/config.ini')
+            config.read('configs/config.ini')
             user_name = config['default']['user_name']
         else:
             if self.token is None:
@@ -181,8 +180,8 @@ class JarvisAssistant:
         try:
             r = sr.Recognizer()
             with sr.Microphone() as source:
-                greeting = random.choice(["Hello", "Hi"])
-                msg = greeting + ' ' + user_name + ',' + ' How may I help you?'
+                greeting = random.choice(["Yeah?", "Hey"])
+                msg = greeting
                 print(msg)
                 self.text2speech(msg)
                 r.pause_threshold = 1
@@ -192,7 +191,7 @@ class JarvisAssistant:
                 command = r.recognize_google(audio, language=lang).lower()
                 print('You said: ' + command + '\n')
             except sr.UnknownValueError:
-                print('....')
+                print('...')
                 command = self.mic_input()
             return command
         except Exception as e:
